@@ -13,6 +13,7 @@ class Attacker():
         self.strength = 0
         self.ws = 0
         self.ap = -0
+        self.models = 0
 
 class Defender():
     def __init__(self, name, toughness, save, wound):
@@ -20,6 +21,7 @@ class Defender():
         self.toughness = 0
         self.save = 0
         self.wound = 0
+        self.models = 0
 
 def main():
 
@@ -31,11 +33,14 @@ def main():
     print("*********************************")
     print()
 
+    print("NOTE:  Currently hand to hand combat only")
+    print()
+
     #Basic details
-    print(Fore.YELLOW + "Let's get some basic information")
+    print(Fore.YELLOW + "Let's get some basic unit information")
     print(Style.RESET_ALL)
     Attacker.name = input("What is the name of your unit? : ")
-    models = int(input("How many models are fighting in the unit? : "))
+    Attacker.models = int(input("How many MODELS are fighting in the unit? : "))
     print()
 
     #Attributes - attackers
@@ -44,10 +49,10 @@ def main():
     Attacker.strength = int(input("What is the STRENGTH charateristic of the Attackers in this unit? : "))
     Attacker.ws = int(input("What is the WEAPON SKILL charateristic of the Attackers in this unit? : "))
     Attacker.attacks = int(input("What is the ATTACK charateristic of the Attackers in this unit? : "))
-    Attacker.damage = int(input("What is the WEAPON DAMAGE rating of the weapon used in this unit? : "))
-    Attacker.ap = int(input("What AP modifiers do the weapons in this unit have? (if none, enter 0 : "))
+    Attacker.damage = int(input("What is the DAMAGE rating of the weapon used in this unit? : "))
+    Attacker.ap = int(input("What AP modifiers do the weapons in this unit have? : "))
     print()
-    unitComp = int(input(Fore.RED + "Does your unit composition give you additional attacks?  If yes, how many per model - if none, enter 0 : "))
+    unitComp = int(input(Fore.RED + "Does your unit composition give you additional attacks?  If yes, how many per model - if no, enter 0 : "))
     print(Style.RESET_ALL)
     print()
 
@@ -55,19 +60,20 @@ def main():
     print(Style.RESET_ALL)
     #Attribues - defenders
     Defender.name = input("What is the name of your unit? : ")
+    Defender.models = int(input("How many MODELS are there in this unit have? : "))
     Defender.toughness = int(input("What is the TOUGHNESS charateristic of the Defenders in their unit? : "))
     Defender.wound = int(input("How many WOUNDS do each model in this unit have? : "))
-    Defender.save = int(input("What is the SAVE charateristic of the models in their unit? : "))
+    Defender.save = int(input("What is the SAVE charateristic of the Attacker.models in their unit? : "))
     print()
 
-    numDice = (models * Attacker.attacks) + (models * unitComp)
+    numDice = (Attacker.models * Attacker.attacks) + (Attacker.models * unitComp)
     totalAttacks = Attacker.attacks + unitComp
 
     print("Here's the information you provided.")
     print()
     print(Fore.GREEN +"{}" .format(Attacker.name))
     print(Style.RESET_ALL)
-    print("Model in the Unit = {}" .format(models))
+    print("Model in the Unit = {}" .format(Attacker.models))
     print("Weapon skill = {}" .format(Attacker.ws))
     print("Total Attacks = {}" .format(totalAttacks))
     print("Strength = {}" .format(Attacker.strength))
@@ -76,6 +82,7 @@ def main():
     print()
     print(Fore.RED +"{}" .format(Defender.name))
     print(Style.RESET_ALL)
+    print("Model in the Unit = {}" .format(Defender.models))
     print("Toughness = {}" .format(Defender.toughness))
     print("Wounds per model = {} " .format(Defender.wound))
     print("Save per model = {}" .format(Defender.save))
@@ -86,7 +93,7 @@ def main():
     #need = 0
 
     print()
-    print(Fore.YELLOW + "You have {} models in this unit and get {} attacks each.  You're rolling {} dice hitting on {}+..." .format(models, totalAttacks, numDice, Attacker.ws))
+    print(Fore.YELLOW + "You have {} models in this unit and get {} attacks each.  You're rolling {} dice hitting on {}+..." .format(Attacker.models, totalAttacks, numDice, Attacker.ws))
     print(Style.RESET_ALL)
 
     need = Attacker.ws
@@ -135,8 +142,14 @@ def main():
 
     need = Defender.save - Attacker.ap
 
-    print(Fore.YELLOW + "{} roll to save {} incoming wounds totalling {} damage, needing rolls of {}+..." .format(Defender.name, total_wins, damage, need))
-    print(Style.RESET_ALL)
+    if need > 6:
+        print(Fore.YELLOW + "{} roll to save {} incoming wounds totalling {} damage, and are unable to make a saving throw ({}+)..." .format(Defender.name, total_wins, damage, need))
+        print(Style.RESET_ALL)
+    else:
+        print(Fore.YELLOW + "{} roll to save {} incoming wounds totalling {} damage, needing rolls of {}+..." .format(Defender.name, total_wins, damage, need))
+        print(Style.RESET_ALL)
+
+    
 
     result = [random.randint(1, 6) for x in range(0, total_wins)]
     print(result, total_wins)
@@ -147,12 +160,22 @@ def main():
     count = sorted(i for i in result if i < need)
     survive = len(count)
 
+   # if Defender.wound >=2 :
+        #final_damage = (survive * Attacker.damage) /2
+   # else:
+        #final_damage = survive * Attacker.damage
+
     final_damage = survive * Attacker.damage
 
     print(Fore.GREEN + "{} save {} incoming wounds and take the remaining {} wound(s) totalling {} damage" .format(Defender.name, saved, survive, final_damage))
     print(Style.RESET_ALL)
 
-    print(Fore.RED + "{} {} have fallen in battle" .format(final_damage /2, Defender.name))
+    alive = final_damage / Defender.wound
+
+    if alive > Defender.models:
+        alive = ("ALL")
+
+    print(Fore.RED + "{} {} have fallen in battle (Unit was {} models with {} wound(s) each)" .format(alive, Defender.name, Defender.models, Defender.wound))
     print(Style.RESET_ALL)
 
 main()
