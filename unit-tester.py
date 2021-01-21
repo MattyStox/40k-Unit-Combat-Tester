@@ -32,7 +32,7 @@ def main():
     print()
 
     #Basic details
-    print(Fore.YELLOW + "Let's get some basic unit information")
+    print(Fore.YELLOW + "Let's get some basic information")
     print(Style.RESET_ALL)
     Attacker.name = input("What is the name of your unit? : ")
     models = int(input("How many models are fighting in the unit? : "))
@@ -41,13 +41,13 @@ def main():
     #Attributes - attackers
     print(Fore.YELLOW + "Let's get some information about the {}'s unit" .format(Attacker.name))
     print(Style.RESET_ALL)
-    Attacker.strength = int(input("What is the strength charateristic of the Attackers in this unit? : "))
-    Attacker.ws = int(input("What is the Weapon skill charateristic of the Attackers in this unit? : "))
-    Attacker.attacks = int(input("What is the attacks charateristic of the Attackers in this unit? : "))
-    Attacker.damage = int(input("What is the damage rating of the weapon used in this unit? : "))
-    Attacker.ap = int(input("What AP modifiers do the weapons in this unit have? : "))
+    Attacker.strength = int(input("What is the STRENGTH charateristic of the Attackers in this unit? : "))
+    Attacker.ws = int(input("What is the WEAPON SKILL charateristic of the Attackers in this unit? : "))
+    Attacker.attacks = int(input("What is the ATTACK charateristic of the Attackers in this unit? : "))
+    Attacker.damage = int(input("What is the WEAPON DAMAGE rating of the weapon used in this unit? : "))
+    Attacker.ap = int(input("What AP modifiers do the weapons in this unit have? (if none, enter 0 : "))
     print()
-    unitComp = int(input(Fore.RED + "Does your unit composition give you additional attacks?  If yes, how many per model - if no, enter 0 : "))
+    unitComp = int(input(Fore.RED + "Does your unit composition give you additional attacks?  If yes, how many per model - if none, enter 0 : "))
     print(Style.RESET_ALL)
     print()
 
@@ -55,9 +55,9 @@ def main():
     print(Style.RESET_ALL)
     #Attribues - defenders
     Defender.name = input("What is the name of your unit? : ")
-    Defender.toughness = int(input("What is the toughness charateristic of the Defenders in their unit? : "))
-    Defender.wound = int(input("How many wounds do each model in this unit have? : "))
-    Defender.save = int(input("What is the save charateristic of the models in their unit? : "))
+    Defender.toughness = int(input("What is the TOUGHNESS charateristic of the Defenders in their unit? : "))
+    Defender.wound = int(input("How many WOUNDS do each model in this unit have? : "))
+    Defender.save = int(input("What is the SAVE charateristic of the models in their unit? : "))
     print()
 
     numDice = (models * Attacker.attacks) + (models * unitComp)
